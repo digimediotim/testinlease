@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="total_sales_margin_sale_order">
+        <field name="name">total.sale.order.margin.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <label for="total_sales_margin" groups="base.group_user"/>
+                <div class="text-nowrap" groups="base.group_user">
+                    <field name="total_sales_margin" class="oe_inline"/>
+                </div>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Sales Person Contribution">
+                    <field name="sales_person_contribution">
+                        <tree editable="bottom" string="Contributions" create="0">
+                            <field name="user_id" invisible="1"/>
+                            <field name="user_name"/>
+                            <field name="product_id"/>
+                            <field name="name" invisible="1"/>
+                            <field name="sale_id" invisible="1"/>
+                            <field name="sale_line_id" invisible="1"/>
+                            <field name="name" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sales_margin_order_line">
+        <field name="name">sale.order.line.sales_margin.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
+                <field name="cost_price" groups="base.group_user" />
+                <field name="sales_margin" groups="base.group_user" attrs="{'readonly': [('parent.state', 'in', ('done','cancel'))]}"/>
+                <field name="contribution_price" groups="base.group_user"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_subtotal']" position="before">
+                <field name="sales_person_ids" groups="base.group_user" widget="many2many_tags" attrs="{'readonly': [('parent.state', 'in', ('done','cancel'))]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="salesmargin_sale_order_line_form">
+        <field name="name">sale.order.line.tree.salesmargin.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="before">
+                <field name="cost_price" groups="base.group_user" attrs="{'readonly': [('parent.state', 'in', ('done','cancel'))]}"/>
+                <field name="sales_margin" groups="base.group_user" attrs="{'readonly': [('parent.state', 'in', ('done','cancel'))]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="before">
+                <field name="sales_person_ids" groups="base.group_user" widget="many2many_tags" attrs="{'readonly': [('parent.state', 'in', ('done','cancel'))]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

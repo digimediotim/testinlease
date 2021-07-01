@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+<record id="view_order_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="after">
+            		<field name="standard_price" readonly="1"/>
+            		<field name="sales_margin"/>
+            		<field name="per_person_subtotal" invisible="1"/>
+            		<field name="m2m_sales_person_ids" widget="many2many_tags" options="{'no_create': True}" />
+            		<field name="sales_person_ids" invisible="1" widget="many2many_tags"/>
+            	</xpath>
+            </field>
+</record>
+<!-- the record below not needed .controlled how it is works -->
+<record id="view_sale_order_line_person_form" model="ir.ui.view">
+		 <field name="name">sale.order.line.person.form</field>
+            <field name="model">sale.order.line.person</field>
+            <field name="arch" type="xml">
+           		<form>
+                    <group>
+                        <group>
+                            <field name="user_id" options="{'no_create': True}" required="1"/>
+                            <field name="sale_line_id" invisible="1"/>
+                        </group>
+                    </group>
+               </form>
+            </field>
+</record>
+
+         <!-- default column and row changed assignment 4  -->   
+       <record id="view_order_product_pivot" model="ir.ui.view">
+         <field name="name">sale.report.pivot</field>
+         <field name="model">sale.report</field>
+         <field name="inherit_id" ref="sale.view_order_product_pivot"/>
+         <field name="arch" type="xml">
+         	<xpath expr="//field[@name='team_id']" position="replace">
+         		<field name="sales_person_id" type="row"/>
+         	</xpath>
+         	<xpath expr="//field[@name='date']" position="replace">
+         		 <field name="date" interval="month" type="col"/>
+         		 <field name="sales_person_amount" type="measure"/>
+         	</xpath>
+         	<xpath expr="//field[@name='price_subtotal']" position="replace"/>
+         </field>
+        </record>
+</data>
+</odoo>
